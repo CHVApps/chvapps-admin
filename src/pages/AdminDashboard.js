@@ -13,10 +13,20 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch('https://chvapps-backend.vercel.app/api/form-submission');
-    const data = await res.json();
-    setSubmissions(data);
-    setFiltered(data);
+    try {
+      const res = await fetch('https://chvapps-backend.vercel.app/api/form-submissions');
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setSubmissions(data);
+        setFiltered(data);
+      } else {
+        setSubmissions([]);
+        setFiltered([]);
+      }
+    } catch {
+      setSubmissions([]);
+      setFiltered([]);
+    }
   };
 
   const handleFilterChange = (e) => {
@@ -37,13 +47,11 @@ const AdminDashboard = () => {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!newCategory.name || !newCategory.type) return;
-
     await fetch('https://chvapps-backend.vercel.app/api/categories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newCategory)
     });
-
     setNewCategory({ name: '', type: '' });
   };
 
@@ -77,7 +85,7 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((sub, idx) => (
+              {(filtered || []).map((sub, idx) => (
                 <tr key={idx}>
                   <td>{sub.id}</td>
                   <td>{sub.name}</td>
@@ -94,25 +102,6 @@ const AdminDashboard = () => {
             </tbody>
           </table>
         </div>
-        {/* 
-        <h2 className="heading">Add Internship or Course</h2>
-        <form className="add-category-form" onSubmit={handleAddCategory}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter Name"
-            value={newCategory.name}
-            onChange={handleInputChange}
-            required
-          />
-          <select name="type" value={newCategory.type} onChange={handleInputChange} required>
-            <option value="">Select Type</option>
-            <option value="internship">Internship</option>
-            <option value="course">Course</option>
-          </select>
-          <button type="submit">Add</button>
-        </form>
-        */}
       </div>
     </div>
   );
