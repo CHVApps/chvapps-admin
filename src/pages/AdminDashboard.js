@@ -13,7 +13,7 @@ const AdminDashboard = () => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch('http://localhost:5000/api/form-submissions');
+    const res = await fetch('https://chvapps-backend.vercel.app/api/form-submission');
     const data = await res.json();
     setSubmissions(data);
     setFiltered(data);
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     if (!newCategory.name || !newCategory.type) return;
 
-    await fetch('http://localhost:5000/api/categories', {
+    await fetch('https://chvapps-backend.vercel.app/api/categories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newCategory)
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
             </tbody>
           </table>
         </div>
-
+        {/* 
         <h2 className="heading">Add Internship or Course</h2>
         <form className="add-category-form" onSubmit={handleAddCategory}>
           <input
@@ -112,6 +112,7 @@ const AdminDashboard = () => {
           </select>
           <button type="submit">Add</button>
         </form>
+        */}
       </div>
     </div>
   );

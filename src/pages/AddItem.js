@@ -13,7 +13,7 @@ const AddItem = () => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch('http://localhost:5000/api/courses-internships');
+    const res = await fetch('https://chvapps-backend.vercel.app/api/courses-internships');
     const data = await res.json();
     setItems(data);
   };
@@ -27,7 +27,7 @@ const AddItem = () => {
     e.preventDefault();
     if (!newCategory.name || !newCategory.type) return;
 
-    await fetch('http://localhost:5000/api/courses-internships', {
+    await fetch('https://chvapps-backend.vercel.app/api/courses-internships', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newCategory)
