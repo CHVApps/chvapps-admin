@@ -14,7 +14,7 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch('https://chvapps-backend.vercel.app/api/form-submission');
+      const res = await fetch('https://chvapps-backend.vercel.app/api/form-submissions');
       const data = await res.json();
       if (Array.isArray(data)) {
         setSubmissions(data);
