@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminDashboard from './pages/AdminDashboard';
 import AddItem from './pages/AddItem';
+import PaymentManagement from './pages/PaymentManagement';
 import './App.css';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AdminDashboard />} />
         <Route path="/add-item" element={<AddItem />} />
+        <Route path="/payments" element={<PaymentManagement />} />
       </Routes>
     </Router>
   );

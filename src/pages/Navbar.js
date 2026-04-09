@@ -41,12 +41,43 @@ function Navbar() {
   return (
     <nav className={`navbar ${showNavbar ? 'visible' : 'hidden'}`} ref={navRef}>
       <div className="navbar-container">
-        <div className="logo-container">
+        <div className="logo-container" onClick={() => handleLinkClick('/')}>
           <img src="/images/Logo1.webp" alt="Logo" className="logo" />
         </div>
+
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
-          <Link to="/" className={isActive('/') ? 'active' : ''} onClick={(e) => { e.preventDefault(); handleLinkClick('/'); }}>Home</Link>
-          <Link to="/add-item" className={isActive('/add-item') ? 'active' : ''} onClick={(e) => { e.preventDefault(); handleLinkClick('/add-item'); }}>Add Item</Link>
+          <Link
+            to="/"
+            className={isActive('/') ? 'active' : ''}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLinkClick('/');
+            }}
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/add-item"
+            className={isActive('/add-item') ? 'active' : ''}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLinkClick('/add-item');
+            }}
+          >
+            Add Item
+          </Link>
+
+          <Link
+            to="/payments"
+            className={isActive('/payments') ? 'active' : ''}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLinkClick('/payments');
+            }}
+          >
+            Payments
+          </Link>
         </div>
       </div>
     </nav>
