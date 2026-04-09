@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import './AdminDashboard.css';
 import Navbar from './Navbar';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://chvapps-backend.vercel.app/api';
+
 const AdminDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [filter, setFilter] = useState('All');
-  const [newCategory, setNewCategory] = useState({ name: '', type: '' });
 
   useEffect(() => {
     fetchData();
@@ -14,8 +15,9 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch('https://chvapps-backend.vercel.app/api/form-submissions');
+      const res = await fetch(`${API_BASE_URL}/form-submissions`);
       const data = await res.json();
+
       if (Array.isArray(data)) {
         setSubmissions(data);
         setFiltered(data);
@@ -32,31 +34,19 @@ const AdminDashboard = () => {
   const handleFilterChange = (e) => {
     const value = e.target.value;
     setFilter(value);
+
     if (value === 'All') {
       setFiltered(submissions);
-    } else {
-      setFiltered(submissions.filter(sub => sub.type === value.toLowerCase()));
+      return;
     }
-  };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewCategory({ ...newCategory, [name]: value });
-  };
-
-  const handleAddCategory = async (e) => {
-    e.preventDefault();
-    if (!newCategory.name || !newCategory.type) return;
-    await fetch('https://chvapps-backend.vercel.app/api/categories', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newCategory)
-    });
-    setNewCategory({ name: '', type: '' });
+    setFiltered(
+      submissions.filter((sub) => String(sub.type || '').toLowerCase() === value.toLowerCase())
+    );
   };
 
   return (
-    <div className='admin'>
+    <div className="admin">
       <Navbar />
       <div className="admin-dashboard">
         <div className="dashboard-header">
@@ -68,6 +58,7 @@ const AdminDashboard = () => {
             <option>Course</option>
           </select>
         </div>
+
         <div className="table-wrapper">
           <table className="data-table">
             <thead>
@@ -85,20 +76,26 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {(filtered || []).map((sub, idx) => (
-                <tr key={idx}>
-                  <td>{sub.id}</td>
-                  <td>{sub.name}</td>
-                  <td>{sub.email}</td>
-                  <td>{sub.mobile_number}</td>
-                  <td>{sub.type}</td>
-                  <td>{sub.subject || '-'}</td>
-                  <td>{sub.internship || '-'}</td>
-                  <td>{sub.course || '-'}</td>
-                  <td>{sub.message}</td>
-                  <td>{sub.created_at ? new Date(sub.created_at).toLocaleDateString() : '-'}</td>
+              {(filtered || []).length > 0 ? (
+                filtered.map((sub) => (
+                  <tr key={sub.id}>
+                    <td>{sub.id}</td>
+                    <td>{sub.name || '-'}</td>
+                    <td>{sub.email || '-'}</td>
+                    <td>{sub.mobile_number || '-'}</td>
+                    <td>{sub.type || '-'}</td>
+                    <td>{sub.subject || '-'}</td>
+                    <td>{sub.internship || '-'}</td>
+                    <td>{sub.course || '-'}</td>
+                    <td>{sub.message || '-'}</td>
+                    <td>{sub.created_at ? new Date(sub.created_at).toLocaleDateString() : '-'}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="10">No submissions found.</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
